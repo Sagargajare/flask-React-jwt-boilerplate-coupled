@@ -39,8 +39,8 @@ export default function Login() {
           <h3>Login</h3>
         </div>
         <form className={classes.form}>
-          <TextField label="Username" variant="outlined" />
-          <TextField label="Password" variant="outlined" />
+          <TextField label="Username" fullWidth variant="outlined" />
+          <TextField label="Password" fullWidth variant="outlined" />
           <Divider />
           <Button fullWidth variant="contained" color="primary">
             Login
