@@ -1,18 +1,25 @@
 import React from "react";
-import { HashRouter, Route, hashHistory, Switch } from "react-router-dom";
-import Home from "./components/Home";
+import {
+  BrowserRouter as Router,
+  HashRouter,
+  Route,
+  hashHistory,
+  Switch,
+} from "react-router-dom";
+import Dashboard from "./components/Dashboard";
 import {
   createTheme,
   makeStyles,
   ThemeProvider,
 } from "@material-ui/core/styles";
-import { orange } from "@material-ui/core/colors";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store/store";
+import { Provider } from "react-redux";
 import Login from "./components/Login";
-// import more components
+import { PrivateRoute, PublicRoute } from "./routerControllers";
 
 const theme = createTheme({
   typography: {
-    // "fontFamily": `"Roboto", "Helvetica", "Arial", sans-serif`,
     fontFamily: `"Nunito Sans", "sans-serif"`,
     fontSize: 14,
     fontWeightLight: 40,
@@ -24,16 +31,12 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      // light: will be calculated from palette.primary.main,
       main: "#005A8D",
       light: "#022E57",
-      // dark: will be calculated from palette.primary.main,
-      // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       light: "#FFF5FD",
       main: "#FF96AD",
-      // dark: will be calculated from palette.secondary.main,
       contrastText: "#ffcc00",
     },
 
@@ -43,14 +46,23 @@ const theme = createTheme({
   },
 });
 export default (
-  <ThemeProvider theme={theme}>
-    <HashRouter history={hashHistory}>
-      <div>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-        </Switch>
-      </div>
-    </HashRouter>
-  </ThemeProvider>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <div>
+            <Switch>
+              {/* <Route exact path="/" component={Home} /> */}
+              <PublicRoute exact path="/" restricted={true} component={Login} />
+              <PrivateRoute
+                restricted={true}
+                component={Dashboard}
+                path="/dashboard"
+              />
+            </Switch>
+          </div>
+        </Router>
+      </ThemeProvider>
+    </PersistGate>
+  </Provider>
 );

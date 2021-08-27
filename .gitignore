@@ -212,7 +212,7 @@ cython_debug/
 logs
 **/*.backup.*
 **/*.back.*
-
+1node_modules
 node_modules
 bower_components
 
